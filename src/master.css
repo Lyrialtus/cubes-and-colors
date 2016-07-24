@@ -1,0 +1,13 @@
+body {
+    background: -webkit-radial-gradient(circle, #bbb, #777) fixed;
+    background: radial-gradient(circle, #bbb, #777) fixed;
+    overflow: hidden;
+    font-family: "Palatino Linotype", Palatino, serif;
+}
+#info {
+    position: absolute;
+    top: 1%;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
