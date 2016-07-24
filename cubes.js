@@ -1,5 +1,9 @@
-var scene, camera, renderer, controls;
-var raycaster, mouse;
+var scene;
+var camera;
+var renderer;
+var controls;
+var raycaster;
+var mouse;
 var cubes;
 
 init();
@@ -37,11 +41,9 @@ function init() {
   scene.add(AmbientLight);
 
   // Renderer
-  renderer = new THREE.WebGLRenderer({
-    alpha: true
-  });
+  renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  container = document.getElementById("container");
+  var container = document.getElementById('container');
   container.appendChild(renderer.domElement);
 
   // Cubes
@@ -49,51 +51,48 @@ function init() {
 
   for (var j = 0; j < num; j++) {
 
-    cube = new THREE.Group();
+    var cube = new THREE.Group();
 
     // Positions for the vertices
     var hidden = new THREE.BoxGeometry(10, 10, 10);
     var positions = hidden.vertices;
 
     // Vertices of the cube
-    cubeVertices = new THREE.Group();
+    var cubeVertices = new THREE.Group();
 
     // Eight spheres in the loop
     for (var i = 0; i < positions.length; i++) {
       var geometry1 = new THREE.SphereGeometry(1, 16, 16);
+
       // Random colors!
-      var material1 = new THREE.MeshPhongMaterial({
-        color: Math.random() * 0xffffff
-      });
+      var material1 = new THREE.MeshPhongMaterial({ color: Math.random() * 0xffffff });
       var sphere = new THREE.Mesh(geometry1, material1);
       sphere.position.set(positions[i].x, positions[i].y, positions[i].z);
       cubeVertices.add(sphere);
     }
 
     // Edges of the cube
-    cubeEdges = new THREE.Group();
+    var cubeEdges = new THREE.Group();
 
     // Four cylinders for y-axis
     var geometry2 = new THREE.CylinderGeometry(0.5, 0.5, 10, 32);
-    var material2 = new THREE.MeshPhongMaterial({
-      color: 0x777777
-    });
-    // 1
-    cylinder = new THREE.Mesh(geometry2, material2);
+    var material2 = new THREE.MeshPhongMaterial({ color: 0x777777 });
+
+    var cylinder = new THREE.Mesh(geometry2, material2); // 1
     cylinder.translateX(5);
     cylinder.translateZ(5);
     var edgeY = new THREE.Group();
     edgeY.add(cylinder);
-    // 2
-    cylinder = cylinder.clone();
+
+    cylinder = cylinder.clone(); // 2
     cylinder.translateZ(-10);
     edgeY.add(cylinder);
-    // 3
-    cylinder = cylinder.clone();
+
+    cylinder = cylinder.clone(); // 3
     cylinder.translateX(-10);
     edgeY.add(cylinder);
-    // 4
-    cylinder = cylinder.clone();
+
+    cylinder = cylinder.clone(); // 4
     cylinder.translateZ(10);
     edgeY.add(cylinder);
 
@@ -119,7 +118,9 @@ function init() {
 
     cubes.add(cube);
   }
+
   scene.add(cubes);
+
   // Useful option
   window.addEventListener('resize', onWindowResize, false);
 
@@ -154,7 +155,7 @@ function onDocumentMouseDown(event) {
   raycaster.setFromCamera(mouse, camera);
   var intersect = [];
   var number = [];
-  for (l = 0; l < cubes.children.length; l++) {
+  for (var l = 0; l < cubes.children.length; l++) {
 
     var intersects = raycaster.intersectObject(cubes.children[l].children[0], true);
 
@@ -173,7 +174,8 @@ function onDocumentMouseDown(event) {
     // Prevention of simultaneous coloring
     if (intersect[0].distance > intersect[1].distance) {
       col = intersect[intersect.length - 1].object.material.color;
-      cubes.children[number[number.length - 1]].children[1].children[0].children[0].material.color.set(col);
+      cubes.children[number[number.length - 1]].children[1]
+          .children[0].children[0].material.color.set(col);
     } else {
       col = intersect[0].object.material.color;
       cubes.children[number[0]].children[1].children[0].children[0].material.color.set(col);
