@@ -1,10 +1,10 @@
-var scene;
-var camera;
-var renderer;
-var controls;
-var raycaster;
-var mouse;
-var cubes;
+let scene;
+let camera;
+let renderer;
+let controls;
+let raycaster;
+let mouse;
+let cubes;
 
 init();
 animate();
@@ -12,7 +12,7 @@ animate();
 function init() {
 
   // For N cubes (from 2 to 8, more 8)
-  var num = Math.floor(Math.random() * 10) + 2;
+  let num = Math.floor(Math.random() * 10) + 2;
   if (num > 7) {
     num = 8;
   }
@@ -33,55 +33,55 @@ function init() {
   controls.dynamicDampingFactor = 0.3;
 
   // Lights
-  var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+  let directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
   directionalLight.position.set(0, 0.5, 1);
   scene.add(directionalLight);
 
-  var AmbientLight = new THREE.AmbientLight(0x777777);
+  let AmbientLight = new THREE.AmbientLight(0x777777);
   scene.add(AmbientLight);
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  var container = document.getElementById('container');
+  let container = document.getElementById('container');
   container.appendChild(renderer.domElement);
 
   // Cubes
   cubes = new THREE.Group();
 
-  for (var j = 0; j < num; j++) {
+  for (let j = 0; j < num; j++) {
 
-    var cube = new THREE.Group();
+    let cube = new THREE.Group();
 
     // Positions for the vertices
-    var hidden = new THREE.BoxGeometry(10, 10, 10);
-    var positions = hidden.vertices;
+    let hidden = new THREE.BoxGeometry(10, 10, 10);
+    let positions = hidden.vertices;
 
     // Vertices of the cube
-    var cubeVertices = new THREE.Group();
+    let cubeVertices = new THREE.Group();
 
     // Eight spheres in the loop
-    for (var i = 0; i < positions.length; i++) {
-      var geometry1 = new THREE.SphereGeometry(1, 16, 16);
+    for (let i = 0; i < positions.length; i++) {
+      let geometry1 = new THREE.SphereGeometry(1, 16, 16);
 
       // Random colors!
-      var material1 = new THREE.MeshPhongMaterial({ color: Math.random() * 0xffffff });
-      var sphere = new THREE.Mesh(geometry1, material1);
+      let material1 = new THREE.MeshPhongMaterial({ color: Math.random() * 0xffffff });
+      let sphere = new THREE.Mesh(geometry1, material1);
       sphere.position.set(positions[i].x, positions[i].y, positions[i].z);
       cubeVertices.add(sphere);
     }
 
     // Edges of the cube
-    var cubeEdges = new THREE.Group();
+    let cubeEdges = new THREE.Group();
 
     // Four cylinders for y-axis
-    var geometry2 = new THREE.CylinderGeometry(0.5, 0.5, 10, 32);
-    var material2 = new THREE.MeshPhongMaterial({ color: 0x777777 });
+    let geometry2 = new THREE.CylinderGeometry(0.5, 0.5, 10, 32);
+    let material2 = new THREE.MeshPhongMaterial({ color: 0x777777 });
 
-    var cylinder = new THREE.Mesh(geometry2, material2); // 1
+    let cylinder = new THREE.Mesh(geometry2, material2); // 1
     cylinder.translateX(5);
     cylinder.translateZ(5);
-    var edgeY = new THREE.Group();
+    let edgeY = new THREE.Group();
     edgeY.add(cylinder);
 
     cylinder = cylinder.clone(); // 2
@@ -97,11 +97,11 @@ function init() {
     edgeY.add(cylinder);
 
     // Adding edges for x-axis
-    var edgeX = edgeY.clone();
+    let edgeX = edgeY.clone();
     edgeX.rotateZ(Math.PI / 2);
 
     // Adding edges for z-axis
-    var edgeZ = edgeY.clone();
+    let edgeZ = edgeY.clone();
     edgeZ.rotateX(Math.PI / 2);
 
     // Final composition of the cube
@@ -153,11 +153,11 @@ function onDocumentMouseDown(event) {
 
   // Tricky raycasting!
   raycaster.setFromCamera(mouse, camera);
-  var intersect = [];
-  var number = [];
-  for (var l = 0; l < cubes.children.length; l++) {
+  let intersect = [];
+  let number = [];
+  for (let l = 0; l < cubes.children.length; l++) {
 
-    var intersects = raycaster.intersectObject(cubes.children[l].children[0], true);
+    let intersects = raycaster.intersectObject(cubes.children[l].children[0], true);
 
     if (intersects.length > 0) {
       intersect.push(intersects[0]);
@@ -165,7 +165,7 @@ function onDocumentMouseDown(event) {
     }
   }
 
-  var col;
+  let col;
   if (intersect.length == 1) {
     // Simple case
     col = intersect[0].object.material.color;
@@ -191,7 +191,7 @@ function animate() {
 
 function render() {
 
-  for (var k = 0; k < cubes.children.length; k++) {
+  for (let k = 0; k < cubes.children.length; k++) {
 
     // Independent rotation
     cubes.children[k].rotation.x += -0.002;
