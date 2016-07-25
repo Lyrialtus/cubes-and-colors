@@ -49,7 +49,7 @@ function init() {
   // Cubes
   cubes = new THREE.Group();
 
-  for (let j = 0; j < num; j++) {
+  for (let i = 0; i < num; i++) {
 
     let cube = new THREE.Group();
 
@@ -110,7 +110,7 @@ function init() {
 
     cube.position.y = Math.random() * 60 - 30;
     cube.position.z = Math.random() * 60 - 30;
-    cube.position.x = j * 20 - num * 10;
+    cube.position.x = i * 20 - num * 10;
 
     cube.rotation.x = Math.random() * 2 * Math.PI;
     cube.rotation.y = Math.random() * 2 * Math.PI;
@@ -155,13 +155,13 @@ function onDocumentMouseDown(event) {
   raycaster.setFromCamera(mouse, camera);
   let intersect = [];
   let number = [];
-  for (let l = 0; l < cubes.children.length; l++) {
+  for (let i = 0; i < cubes.children.length; i++) {
 
-    let intersects = raycaster.intersectObject(cubes.children[l].children[0], true);
+    let intersects = raycaster.intersectObject(cubes.children[i].children[0], true);
 
     if (intersects.length > 0) {
       intersect.push(intersects[0]);
-      number.push(l);
+      number.push(i);
     }
   }
 
@@ -191,12 +191,12 @@ function animate() {
 
 function render() {
 
-  for (let k = 0; k < cubes.children.length; k++) {
+  for (let i = 0; i < cubes.children.length; i++) {
 
     // Independent rotation
-    cubes.children[k].rotation.x += -0.002;
-    cubes.children[k].rotation.y += -0.002;
-    cubes.children[k].rotation.z += -0.002;
+    cubes.children[i].rotation.x += -0.002;
+    cubes.children[i].rotation.y += -0.002;
+    cubes.children[i].rotation.z += -0.002;
   }
 
   controls.update();
