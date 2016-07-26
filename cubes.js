@@ -13,17 +13,14 @@ animate();
 
 function init() {
 
-  // For N cubes (from 2 to 8, more 8)
-  let num = Math.floor(Math.random() * 10) + 2;
-  if (num > 7) {
-    num = 8;
-  }
+  // For N cubes (from 2 to 8)
+  const CUBES_NUM = Math.floor(Math.random() * 7) + 2;
 
   // Scene and camera
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.z = 70 + num * 10;
+  camera.position.z = 70 + CUBES_NUM * 10;
 
   // Navigation
   controls = new THREE.TrackballControls(camera);
@@ -51,7 +48,7 @@ function init() {
   // Cubes
   cubes = new THREE.Group();
 
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < CUBES_NUM; i++) {
 
     let cube = new THREE.Group();
 
@@ -112,7 +109,7 @@ function init() {
 
     cube.position.y = Math.random() * 60 - 30;
     cube.position.z = Math.random() * 60 - 30;
-    cube.position.x = i * 20 - num * 10;
+    cube.position.x = i * 20 - CUBES_NUM * 10;
 
     cube.rotation.x = Math.random() * 2 * Math.PI;
     cube.rotation.y = Math.random() * 2 * Math.PI;
