@@ -1,3 +1,5 @@
+'use strict';
+
 let scene;
 let camera;
 let renderer;
