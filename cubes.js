@@ -163,7 +163,7 @@ class Animation {
     }
 
     let col;
-    if (intersect.length == 1) {
+    if (intersect.length === 1) {
       // Simple case
       col = intersect[0].object.material.color;
       cubes.children[number].children[1].children[0].children[0].material.color.set(col);
