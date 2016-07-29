@@ -13,7 +13,6 @@ class Animation {
   }
 
   init() {
-
     // For N cubes (from 2 to 8)
     const CUBES_NUM = Math.floor(Math.random() * 7) + 2;
 
@@ -117,37 +116,36 @@ class Animation {
     this.scene.add(this.cubes);
 
     // Useful option
-    window.addEventListener('resize', this.onWindowResize, false);
+    window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
     // For clicks
-    document.addEventListener('mousedown', this.onDocumentMouseDown, false);
+    document.addEventListener('mousedown', this.onDocumentMouseDown.bind(this), false);
 
     // For touches
-    document.addEventListener('touchstart', this.onDocumentTouchStart, false);
+    document.addEventListener('touchstart', this.onDocumentTouchStart.bind(this), false);
   }
 
   onWindowResize() {
-    animation.camera.aspect = window.innerWidth / window.innerHeight;
-    animation.camera.updateProjectionMatrix();
-    animation.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   onDocumentTouchStart(event) {
     event.preventDefault();
     event.clientX = event.touches[0].clientX;
     event.clientY = event.touches[0].clientY;
-    animation.onDocumentMouseDown(event);
+    this.onDocumentMouseDown(event);
   }
 
   onDocumentMouseDown(event) {
     event.preventDefault();
-
-    animation.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    animation.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     // Raycasting and coloring
-    animation.raycaster.setFromCamera(animation.mouse, animation.camera);
-    let intersects = animation.raycaster.intersectObjects(animation.allVertices);
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    let intersects = this.raycaster.intersectObjects(this.allVertices);
 
     if (intersects.length > 0) {
       let col = intersects[0].object.material.color;
@@ -157,12 +155,11 @@ class Animation {
   }
 
   animate() {
-    requestAnimationFrame(animation.animate);
-    animation.render();
+    requestAnimationFrame(this.animate.bind(this));
+    this.render();
   }
 
   render() {
-
     for (let i = 0; i < this.cubes.children.length; i++) {
 
       // Independent rotation
