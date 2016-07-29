@@ -1,5 +1,5 @@
 # Cubes and colors
-Just a test task for a Three.js practice...
+Just a test task for a Three.js practice... And some other JS related practice...
 
 From 2 to 8 rotating faceless cubes with colorable edges.
 
