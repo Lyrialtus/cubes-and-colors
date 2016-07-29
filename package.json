@@ -1,0 +1,24 @@
+{
+  "name": "cubes-and-colors",
+  "version": "1.0.0",
+  "description": "Just a test task for a Three.js practice...",
+  "main": "cubes.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lyrialtus/cubes-and-colors.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lyrialtus/cubes-and-colors/issues"
+  },
+  "homepage": "https://github.com/Lyrialtus/cubes-and-colors#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2"
+  }
+}
