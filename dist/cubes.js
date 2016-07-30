@@ -2,61 +2,60 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var scene = void 0;
-var camera = void 0;
-var renderer = void 0;
-var controls = void 0;
-var raycaster = void 0;
-var mouse = void 0;
-var cubes = void 0;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Animation = function () {
   function Animation() {
     _classCallCheck(this, Animation);
+
+    this.scene = new THREE.Scene();
+    this.camera = [];
+    this.controls = [];
+    this.renderer = [];
+    this.mouse = new THREE.Vector2();
+    this.raycaster = new THREE.Raycaster();
+    this.cubes = new THREE.Group();
+    this.allVertices = [];
   }
 
   _createClass(Animation, [{
     key: 'init',
     value: function init() {
-
       // For N cubes (from 2 to 8)
       var CUBES_NUM = Math.floor(Math.random() * 7) + 2;
 
-      // Scene and camera
-      scene = new THREE.Scene();
-
-      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
-      camera.position.z = 70 + CUBES_NUM * 10;
+      // Camera
+      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+      this.camera.position.z = 70 + CUBES_NUM * 10;
 
       // Navigation
-      controls = new THREE.TrackballControls(camera);
-      controls.rotateSpeed = 1.0;
-      controls.zoomSpeed = 0.5;
-      controls.panSpeed = 0.8;
-      controls.noZoom = false;
-      controls.noPan = false;
-      controls.dynamicDampingFactor = 0.3;
+      this.controls = new THREE.TrackballControls(this.camera);
+      this.controls.rotateSpeed = 1.0;
+      this.controls.zoomSpeed = 0.5;
+      this.controls.panSpeed = 0.8;
+      this.controls.noZoom = false;
+      this.controls.noPan = false;
+      this.controls.dynamicDampingFactor = 0.3;
 
       // Lights
       var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
       directionalLight.position.set(0, 0.5, 1);
-      scene.add(directionalLight);
+      this.scene.add(directionalLight);
 
       var AmbientLight = new THREE.AmbientLight(0x777777);
-      scene.add(AmbientLight);
+      this.scene.add(AmbientLight);
 
       // Renderer
-      renderer = new THREE.WebGLRenderer({ alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer = new THREE.WebGLRenderer({ alpha: true });
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
       var container = document.getElementById('container');
-      container.appendChild(renderer.domElement);
+      container.appendChild(this.renderer.domElement);
 
       // Cubes
-      cubes = new THREE.Group();
-
       for (var i = 0; i < CUBES_NUM; i++) {
+        var _allVertices;
 
         var cube = new THREE.Group();
 
@@ -71,49 +70,48 @@ var Animation = function () {
         for (var _i = 0; _i < positions.length; _i++) {
           var geometry1 = new THREE.SphereGeometry(1, 16, 16);
 
-          // Random colors!
+          // Random colors
           var material1 = new THREE.MeshPhongMaterial({ color: Math.random() * 0xffffff });
           var sphere = new THREE.Mesh(geometry1, material1);
           sphere.position.set(positions[_i].x, positions[_i].y, positions[_i].z);
           cubeVertices.add(sphere);
         }
 
-        // Edges of the cube
-        var cubeEdges = new THREE.Group();
+        // Raycaster will use it
+        (_allVertices = this.allVertices).push.apply(_allVertices, _toConsumableArray(cubeVertices.children));
 
-        // Four cylinders for y-axis
+        // Edges of the cube: four cylinders for y-axis
         var geometry2 = new THREE.CylinderGeometry(0.5, 0.5, 10, 32);
         var material2 = new THREE.MeshPhongMaterial({ color: 0x777777 });
 
         var cylinder = new THREE.Mesh(geometry2, material2); // 1
         cylinder.translateX(5);
         cylinder.translateZ(5);
-        var edgeY = new THREE.Group();
-        edgeY.add(cylinder);
+        var edgesY = new THREE.Group();
+        edgesY.add(cylinder);
 
         cylinder = cylinder.clone(); // 2
         cylinder.translateZ(-10);
-        edgeY.add(cylinder);
+        edgesY.add(cylinder);
 
         cylinder = cylinder.clone(); // 3
         cylinder.translateX(-10);
-        edgeY.add(cylinder);
+        edgesY.add(cylinder);
 
         cylinder = cylinder.clone(); // 4
         cylinder.translateZ(10);
-        edgeY.add(cylinder);
+        edgesY.add(cylinder);
 
         // Adding edges for x-axis
-        var edgeX = edgeY.clone();
-        edgeX.rotateZ(Math.PI / 2);
+        var edgesX = edgesY.clone();
+        edgesX.rotateZ(Math.PI / 2);
 
         // Adding edges for z-axis
-        var edgeZ = edgeY.clone();
-        edgeZ.rotateX(Math.PI / 2);
+        var edgesZ = edgesY.clone();
+        edgesZ.rotateX(Math.PI / 2);
 
         // Final composition of the cube
-        cubeEdges.add(edgeX, edgeY, edgeZ);
-        cube.add(cubeVertices, cubeEdges);
+        cube.add(cubeVertices, edgesX, edgesY, edgesZ);
 
         cube.position.y = Math.random() * 60 - 30;
         cube.position.z = Math.random() * 60 - 30;
@@ -123,28 +121,26 @@ var Animation = function () {
         cube.rotation.y = Math.random() * 2 * Math.PI;
         cube.rotation.z = Math.random() * 2 * Math.PI;
 
-        cubes.add(cube);
+        this.cubes.add(cube);
       }
 
-      scene.add(cubes);
+      this.scene.add(this.cubes);
 
       // Useful option
-      window.addEventListener('resize', this.onWindowResize, false);
+      window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
-      // Edge coloring
-      raycaster = new THREE.Raycaster();
-      mouse = new THREE.Vector2();
-      document.addEventListener('mousedown', this.onDocumentMouseDown, false);
+      // For clicks
+      document.addEventListener('mousedown', this.onDocumentMouseDown.bind(this), false);
 
       // For touches
-      document.addEventListener('touchstart', this.onDocumentTouchStart, false);
+      document.addEventListener('touchstart', this.onDocumentTouchStart.bind(this), false);
     }
   }, {
     key: 'onWindowResize',
     value: function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
   }, {
     key: 'onDocumentTouchStart',
@@ -152,43 +148,23 @@ var Animation = function () {
       event.preventDefault();
       event.clientX = event.touches[0].clientX;
       event.clientY = event.touches[0].clientY;
-      onDocumentMouseDown(event);
+      this.onDocumentMouseDown(event);
     }
   }, {
     key: 'onDocumentMouseDown',
     value: function onDocumentMouseDown(event) {
       event.preventDefault();
-      mouse.x = event.clientX / window.innerWidth * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      this.mouse.x = event.clientX / window.innerWidth * 2 - 1;
+      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      // Tricky raycasting!
-      raycaster.setFromCamera(mouse, camera);
-      var intersect = [];
-      var number = [];
-      for (var i = 0; i < cubes.children.length; i++) {
+      // Raycasting and coloring
+      this.raycaster.setFromCamera(this.mouse, this.camera);
+      var intersects = this.raycaster.intersectObjects(this.allVertices);
 
-        var intersects = raycaster.intersectObject(cubes.children[i].children[0], true);
-
-        if (intersects.length > 0) {
-          intersect.push(intersects[0]);
-          number.push(i);
-        }
-      }
-
-      var col = void 0;
-      if (intersect.length === 1) {
-        // Simple case
-        col = intersect[0].object.material.color;
-        cubes.children[number].children[1].children[0].children[0].material.color.set(col);
-      } else if (intersect.length > 1) {
-        // Prevention of simultaneous coloring
-        if (intersect[0].distance > intersect[1].distance) {
-          col = intersect[intersect.length - 1].object.material.color;
-          cubes.children[number[number.length - 1]].children[1].children[0].children[0].material.color.set(col);
-        } else {
-          col = intersect[0].object.material.color;
-          cubes.children[number[0]].children[1].children[0].children[0].material.color.set(col);
-        }
+      if (intersects.length > 0) {
+        var col = intersects[0].object.material.color;
+        var parentCube = intersects[0].object.parent.parent;
+        parentCube.children[1].children[0].material.color.set(col);
       }
     }
   }, {
@@ -200,17 +176,16 @@ var Animation = function () {
   }, {
     key: 'render',
     value: function render() {
-
-      for (var i = 0; i < cubes.children.length; i++) {
+      for (var i = 0; i < this.cubes.children.length; i++) {
 
         // Independent rotation
-        cubes.children[i].rotation.x += -0.002;
-        cubes.children[i].rotation.y += -0.002;
-        cubes.children[i].rotation.z += -0.002;
+        this.cubes.children[i].rotation.x += -0.002;
+        this.cubes.children[i].rotation.y += -0.002;
+        this.cubes.children[i].rotation.z += -0.002;
       }
 
-      controls.update();
-      renderer.render(scene, camera);
+      this.controls.update();
+      this.renderer.render(this.scene, this.camera);
     }
   }]);
 
