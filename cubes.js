@@ -1,5 +1,8 @@
 'use strict';
 
+import THREE from 'three';
+import 'TrackballControls';
+
 class Animation {
   constructor() {
     this.scene = new THREE.Scene();
