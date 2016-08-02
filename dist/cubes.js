@@ -1,18 +1,3 @@
-requirejs.config({
-  paths: {
-    'three': '../src/three',
-    'TrackballControls': '../src/TrackballControls',
-  },
-  shim: {
-    three: {
-      exports: 'THREE',
-    },
-    TrackballControls: {
-      deps: ['three'],
-    },
-  },
-});
-
 define(['three', 'TrackballControls'], function (_three) {
   'use strict';
 

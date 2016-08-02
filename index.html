@@ -18,6 +18,22 @@
     <div id="info">Color edges of cubes by clicking on vertices</div>
 
     <script data-main="dist/cubes.js" src="require.js"></script>
+    <script>
+      requirejs.config({
+        paths: {
+          'three': '../node_modules/three/build/three',
+          'TrackballControls': '../node_modules/three-trackballcontrols/index',
+        },
+        shim: {
+          three: {
+            exports: 'THREE',
+          },
+          TrackballControls: {
+            deps: ['three'],
+          },
+        },
+      });
+    </script>
 
   </body>
 
