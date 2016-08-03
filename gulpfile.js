@@ -9,11 +9,3 @@ gulp.task('default', () =>
           }))
         .pipe(gulp.dest('dist'))
 );
-
-gulp.task('index', () =>
-    gulp.src('node_modules/three-trackballcontrols/index.js')
-        .pipe(babel({
-            plugins: ['transform-es2015-modules-amd'],
-          }))
-        .pipe(gulp.dest('node_modules/three-trackballcontrols'))
-);
