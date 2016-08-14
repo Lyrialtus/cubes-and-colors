@@ -179,3 +179,4 @@ class Animation {
 let animation = new Animation();
 animation.init();
 animation.animate();
+document.getElementById('loading').style.display = 'none';

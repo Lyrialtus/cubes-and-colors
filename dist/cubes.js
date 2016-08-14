@@ -234,4 +234,5 @@ define(['three', 'TrackballControls'], function (_three) {
   var animation = new Animation();
   animation.init();
   animation.animate();
+  document.getElementById('loading').style.display = 'none';
 });
